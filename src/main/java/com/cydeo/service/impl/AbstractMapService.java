@@ -18,7 +18,7 @@ public abstract class AbstractMapService <T, ID>{
         return new ArrayList<>(map.values());
     }
 
-    T findById(ID id){
+    T findById(ID id){                      //unique element to find the object in the future DB
         return map.get(id);
     }
 
