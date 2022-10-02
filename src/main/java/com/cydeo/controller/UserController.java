@@ -39,7 +39,7 @@ public class UserController {
 
         userService.save(user);
 
-        return "redirect:/user/create";
+        return "redirect: /user/create";
 
     }
 
@@ -60,7 +60,7 @@ public class UserController {
 
         userService.update(user);
 
-        return "redirect:/user/create";
+        return "redirect: /user/create";
     }
 
     @GetMapping("/delete/{userName}")
@@ -68,7 +68,7 @@ public class UserController {
 
         userService.deleteById(userName);
 
-        return "redirect:/user/create";
+        return "redirect: /user/create";
     }
 
 

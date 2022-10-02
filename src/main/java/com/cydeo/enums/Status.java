@@ -1,20 +1,16 @@
 package com.cydeo.enums;
 
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-@AllArgsConstructor
-@Getter
 public enum Status {
 
-    OPEN("Open"), IN_PROGRESS("In Progress"), COMPLETE("Completed");
-
+    OPEN("Open"),IN_PROGRESS("In Progress"),COMPLETE("Completed");
 
     private final String value;
 
+    public String getValue() {
+        return value;
+    }
 
-
-
-
+    Status(String value) {
+        this.value = value;
+    }
 }
