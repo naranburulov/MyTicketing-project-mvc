@@ -9,7 +9,8 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
-//@AllArgsConstructor we are not using AllArgsConstructor here, because we need parent fields as well
+//@AllArgsConstructor - well, we are not using AllArgsConstructor here,
+// because we need parent fields as well
 public class User extends BaseEntity{
 
     private String firstName;
