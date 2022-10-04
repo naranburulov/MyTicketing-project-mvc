@@ -87,7 +87,7 @@ public class ProjectController {
         //later it will come from login info
 
 
-        List<ProjectDTO> projects = projectService.getC
+        List<ProjectDTO> projects = projectService.getCountedListOfProjectDTO(manager);
 
         model.addAttribute("projects", projects);
 
