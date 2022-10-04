@@ -1,6 +1,7 @@
 package com.cydeo.dto;
 
 import com.cydeo.enums.Status;
+import com.cydeo.service.CrudService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,9 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TaskDTO {
+public class TaskDTO{
+
+    private Long id;            //creating something unique for TaskCreate
 
     private ProjectDTO project;
     private UserDTO assignedEmployee;
