@@ -37,6 +37,11 @@ public class ProjectServiceImpl extends AbstractMapService<ProjectDTO, String> i
 
     @Override
     public void update(ProjectDTO object) {
+        //problem was that, when we save the project, it saved it with no status (meaning status was null)
+        if(object.getProjectStatus()==null){
+            object.setProjectStatus(findById(object.getProjectCode()).getProjectStatus());
+        }   //grabbing the existing status and setting it as the status, instead of null
+
         super.update(object.getProjectCode(),object);
     }
 
