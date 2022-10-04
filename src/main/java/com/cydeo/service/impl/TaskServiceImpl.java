@@ -75,8 +75,17 @@ public class TaskServiceImpl extends AbstractMapService<TaskDTO,Long> implements
 
     @Override
     public List<TaskDTO> findAllTasksByStatus(Status status) {
+
         return findAll().stream()
                 .filter(task -> task.getTaskStatus().equals(status))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void updateStatus(TaskDTO task) {
+
+        findById(task.getId()).setTaskStatus(task.getTaskStatus()); //first, status is updated
+        update(task);                       //second, task is updated with the new status information
+
     }
 }
