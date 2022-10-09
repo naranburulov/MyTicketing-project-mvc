@@ -2,7 +2,6 @@ package com.cydeo.controller;
 
 import com.cydeo.dto.ProjectDTO;
 import com.cydeo.dto.UserDTO;
-import com.cydeo.enums.Status;
 import com.cydeo.service.ProjectService;
 import com.cydeo.service.UserService;
 import org.springframework.stereotype.Controller;
@@ -61,6 +60,14 @@ public class ProjectController {
         return "redirect:/project/create";
     }
 
+    @GetMapping("/manager/complete/{projectCode}")
+    public String managerCompleteProject(@PathVariable String projectCode) {
+
+        projectService.complete(projectService.findById(projectCode));
+
+        return "redirect:/project/manager/project-status";
+    }
+
     @GetMapping("/update/{projectCode}")
     public String editProject(@PathVariable("projectCode") String projectCode, Model model){
 
@@ -93,6 +100,8 @@ public class ProjectController {
 
         return "/manager/project-status";
     }
+
+
 
 
 
