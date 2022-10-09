@@ -76,6 +76,10 @@ public class TaskController {
 //        return "redirect:/task/create";
 //    }
 
+    //Spring power behind the scenes: since the {id} field is exactly
+    // the same with TaskDto class's field = private Long id;
+    //Spring knows what to parse and where.
+
     @PostMapping("update/{id}")
     public String updateTask(TaskDTO task){
 
