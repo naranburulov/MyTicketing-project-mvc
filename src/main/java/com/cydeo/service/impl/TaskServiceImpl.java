@@ -23,7 +23,7 @@ public class TaskServiceImpl extends AbstractMapService<TaskDTO,Long> implements
         if (task.getAssignedDate()==null){
             task.setAssignedDate(LocalDate.now());
         }
-        if (task.getId()==null){
+        if (task.getId()==null){                                    //challenge was, when new task was created, it couldn't be deleted, for no ID was assigned behind the scenes
             task.setId(UUID.randomUUID().getMostSignificantBits());
         }
 
