@@ -34,7 +34,7 @@ public class RoleDtoConverter implements Converter<String,RoleDTO>{
 }
 
 /*
-Before, I was getting this error in the browser,
+Before, I was getting this error in the browser,4
 when I was attempting to save my objects.
 (problem with selecting roles as value (1/2/3) and converting into String,
 to save into saved rows)
