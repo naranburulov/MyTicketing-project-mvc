@@ -1,36 +1,38 @@
 package com.cydeo.entity;
 
 import com.cydeo.enums.Gender;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.Where;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-//@AllArgsConstructor - well, we are not using AllArgsConstructor here,
-// because we need parent fields as well
+@Entity
+@Table(name = "users")
+//@Where(clause = "is_deleted = false")
+//all repo queries, which will be using this User entity, will have this condition @Where (and it will ignore the "isDeleted" statement)
+//@AllArgsConstructor - no AllArgsConstructor here,because we need parent's fields as well
 public class User extends BaseEntity{
 
     private String firstName;
     private String lastName;
+
+    @Column(unique = true)
     private String userName;
+
     private String passWord;
     private boolean enabled;
     private String phone;
+
+    @ManyToOne
     private Role role;
+
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    public User(Long id, LocalDateTime insertDateTime, Long insertUserId, LocalDateTime lastUpdateDateTime, Long lastUpdateUserId, String firstName, String lastName, String userName, String passWord, boolean enabled, String phone, Role role, Gender gender) {
-        super(id, insertDateTime, insertUserId, lastUpdateDateTime, lastUpdateUserId);
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.userName = userName;
-        this.passWord = passWord;
-        this.enabled = enabled;
-        this.phone = phone;
-        this.role = role;
-        this.gender = gender;
-    }
+
+
 }

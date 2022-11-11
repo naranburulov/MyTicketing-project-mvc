@@ -2,7 +2,6 @@ package com.cydeo.dto;
 
 import com.cydeo.enums.Gender;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -13,6 +12,18 @@ import javax.validation.constraints.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDTO {
+
+    private Long id;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+
 
     @NotBlank
     @Size(max=15,min=2)

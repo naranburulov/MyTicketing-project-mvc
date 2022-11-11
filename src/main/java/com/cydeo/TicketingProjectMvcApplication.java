@@ -13,8 +13,8 @@ public class TicketingProjectMvcApplication {
     }
 
     @Bean
-    ModelMapper modelMapper(){
-        return modelMapper();
+    ModelMapper mapper(){
+        return new ModelMapper();
     }
 
 }
