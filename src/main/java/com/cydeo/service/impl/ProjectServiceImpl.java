@@ -4,6 +4,7 @@ import com.cydeo.dto.ProjectDTO;
 import com.cydeo.dto.UserDTO;
 import com.cydeo.entity.Project;
 import com.cydeo.entity.User;
+import com.cydeo.enums.Status;
 import com.cydeo.mapper.MapperUtil;
 import com.cydeo.repository.ProjectRepository;
 import com.cydeo.service.ProjectService;
@@ -32,6 +33,13 @@ public class ProjectServiceImpl implements ProjectService {
         this.taskService = taskService;
     }
 
+
+    @Override
+    public ProjectDTO getByProjectCode(String code) {
+        Project project = projectRepository.findByProjectCode(code);
+
+        return mapperUtil.convert(project,ProjectDTO.class);
+    }
 
     @Override
     public List<ProjectDTO> listAllProjects() {
@@ -64,5 +72,66 @@ public class ProjectServiceImpl implements ProjectService {
             return obj;
 
         }).collect(Collectors.toList());
+    }
+
+    @Override
+    public void save(ProjectDTO dto) {
+
+        dto.setProjectStatus(Status.OPEN);
+
+        projectRepository.save(mapperUtil.convert(dto,Project.class));
+
+    }
+
+    @Override
+    public void update(ProjectDTO dto) {
+
+        Project project = projectRepository.findByProjectCode(dto.getProjectCode());
+        Project convertedProject = mapperUtil.convert(dto, Project.class);
+        convertedProject.setId(project.getId());
+        convertedProject.setProjectStatus(project.getProjectStatus());
+        projectRepository.save(convertedProject);
+
+    }
+
+    @Override
+    public void delete(String code) {
+        Project project = projectRepository.findByProjectCode(code);
+        project.setProjectStatus(Status.COMPLETE);
+        project.setIsDeleted(true);     //since we don't really delete the obj from DB, but only UI
+
+
+        //to avoid the certain bug @Column (unique=true)
+        // in project entity's unique id, which is projectCode
+        project.setProjectCode((project.getProjectCode()) + "-" + project.getId()); //SP03-4
+
+
+        // and save the project object
+        projectRepository.save(project);
+
+
+        taskService.deleteByProject(mapperUtil.convert(project,ProjectDTO.class));
+
+
+    }
+
+    @Override
+    public void complete(String projectCode) {
+
+        Project project = projectRepository.findByProjectCode(projectCode);
+        project.setProjectStatus(Status.COMPLETE);
+        projectRepository.save(project);
+
+        //fixing the bug with completing tasks of the completing project
+        taskService.completeByProject(mapperUtil.convert(project,ProjectDTO.class));
+
+
+    }
+
+    @Override
+    public List<ProjectDTO> listAllNonCompletedByAssignedManager(UserDTO assignedManager) {
+        List<Project> projects = projectRepository
+                .findAllByProjectStatusIsNotAndAssignedManager(Status.COMPLETE,mapperUtil.convert(assignedManager,User.class));
+        return projects.stream().map(project -> mapperUtil.convert(project,ProjectDTO.class)).collect(Collectors.toList());
     }
 }
