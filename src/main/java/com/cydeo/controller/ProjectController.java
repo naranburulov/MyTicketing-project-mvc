@@ -5,7 +5,12 @@ import com.cydeo.service.ProjectService;
 import com.cydeo.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.math.BigDecimal;
+import java.util.List;
 
 @Controller
 @RequestMapping("/project")
@@ -33,74 +38,76 @@ public class ProjectController {
     @PostMapping("/create")
     public String insertProject(@ModelAttribute("project") ProjectDTO project){
 
-
         projectService.save(project);
-
         return "redirect:/project/create";
     }
 
-//    @GetMapping("/delete/{projectCode}")
-//    public String deleteProject(@PathVariable("projectCode") String projectCode){
-//
-//        projectService.deleteById(projectCode);
-//
-//        return "redirect:/project/create";
-//
-//    }
-//
-//    @GetMapping("/complete/{projectCode}")
-//    public String completeProject(@PathVariable("projectCode") String projectCode) {
-//
-//        projectService.complete(projectService.findById(projectCode));
-//
-//        return "redirect:/project/create";
-//    }
-//
-//    @GetMapping("/manager/complete/{projectCode}")
-//    public String managerCompleteProject(@PathVariable String projectCode) {
-//
-//        projectService.complete(projectService.findById(projectCode));
-//
-//        return "redirect:/project/manager/project-status";
-//    }
-//
-//    @GetMapping("/update/{projectCode}")
-//    public String editProject(@PathVariable("projectCode") String projectCode, Model model){
-//
-//        model.addAttribute("project", projectService.findById(projectCode));
-//        model.addAttribute("managers",userService.findAll());
-//        model.addAttribute("projects",projectService.findAll());
-//
-//        return "/project/update";
-//    }
-//
-//    @PostMapping("/update")
-//    public String updateProject(@ModelAttribute("project") ProjectDTO project){
-//
-//        projectService.update(project);
-//
-//        return "redirect:/project/create";
-//    }
-//
-//    @GetMapping("/manager/project-status")
-//    public String getProjectByManager(Model model){
-//
-//        UserDTO manager = userService.findById("john@cydeo.com");
-//        //now I don't have the security yet, that is why it is hardcoded
-//        //later it will come from login info
-//
-//
-//        List<ProjectDTO> projects = projectService.getCountedListOfProjectDTO(manager);
-//
-//        model.addAttribute("projects", projects);
-//
-//        return "/manager/project-status";
-//    }
-//
-//
-//
-//
-//
-//
+    @GetMapping("/delete/{projectCode}")
+    public String deleteProject(@PathVariable("projectCode") String projectCode){
+
+        projectService.delete(projectCode);
+        return "redirect:/project/create";
+    }
+
+
+    @GetMapping("/complete/{projectCode}")
+    public String completeProject(@PathVariable("projectCode") String projectCode) {
+
+        projectService.complete(projectCode);
+        return "redirect:/project/create";
+    }
+
+
+    @GetMapping("/manager/complete/{projectCode}")
+    public String managerCompleteProject(@PathVariable String projectCode) {
+
+        projectService.complete(projectCode);
+        return "redirect:/project/manager/project-status";
+    }
+
+    @GetMapping("/update/{projectCode}")
+    public String editProject(@PathVariable("projectCode") String projectCode, Model model){
+
+        model.addAttribute("project", projectService.getByProjectCode(projectCode));
+        model.addAttribute("managers",userService.listAllByRole("manager"));
+        model.addAttribute("projects",projectService.listAllProjectDetails());
+
+        return "/project/update";
+    }
+
+    @PostMapping("/update")
+    public String updateProject(@Valid @ModelAttribute("project") ProjectDTO project, BindingResult bindingResult, Model model){
+
+
+        if (bindingResult.hasErrors())  {
+
+            model.addAttribute("managers", userService.listAllByRole("manager"));
+            model.addAttribute("projects", projectService.listAllProjectDetails());
+
+            return "/project/update";
+
+        }
+
+
+        projectService.update(project);
+        return "redirect:/project/create";
+    }
+
+    @GetMapping("/manager/project-status")
+    public String getProjectByManager(Model model){
+
+        //we need to see all the projects of the chosen manager
+        List<ProjectDTO> projects = projectService.listAllProjectDetails();
+
+        model.addAttribute("projects", projects);
+
+        return "/manager/project-status";
+    }
+
+
+
+
+
+
 
 }
