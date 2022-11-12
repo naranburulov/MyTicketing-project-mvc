@@ -3,6 +3,7 @@ package com.cydeo.service.impl;
 import com.cydeo.dto.UserDTO;
 import com.cydeo.entity.User;
 import com.cydeo.mapper.UserMapper;
+import com.cydeo.repository.RoleRepository;
 import com.cydeo.repository.UserRepository;
 import com.cydeo.service.UserService;
 import org.springframework.stereotype.Service;
@@ -16,16 +17,18 @@ public class UserServiceImpl implements UserService {
 
     private final UserMapper userMapper;
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
-    public UserServiceImpl(UserMapper userMapper, UserRepository userRepository) {
+    public UserServiceImpl(UserMapper userMapper, UserRepository userRepository, RoleRepository roleRepository) {
         this.userMapper = userMapper;
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
     }
 
 
     @Override
     public List<UserDTO> listAllUsers() {
-        return userRepository.findAll().stream().map(userMapper::convertToDTO).collect(Collectors.toList());
+        return userRepository.findAll().stream().map(userMapper::convertToDto).collect(Collectors.toList());
     }
 
     @Override
@@ -33,7 +36,7 @@ public class UserServiceImpl implements UserService {
 
         User theUser = userRepository.findByUserName(userName);
 
-        return userMapper.convertToDTO(theUser);
+        return userMapper.convertToDto(theUser);
 
     }
 
@@ -66,6 +69,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(String userName) {
         userRepository.deleteByUserName(userName);
+    }
+
+    @Override
+    public List<UserDTO> listAllByRole(String role) {
+        //go to DB and bring the users with those roles
+        List<User> users = userRepository.findByRoleDescriptionIgnoreCaseAndIsDeleted(role, false);
+
+        return users.stream().map(userMapper::convertToDto).collect(Collectors.toList());
     }
 
 
