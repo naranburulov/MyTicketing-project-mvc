@@ -35,7 +35,6 @@ public class UserController {
 
 
 
-
     @PostMapping("/create")
     public String insertUser(@Valid @ModelAttribute("user") UserDTO userDTO, BindingResult bindingResult, Model model){
 
@@ -54,9 +53,6 @@ public class UserController {
 
 
 
-
-
-
     //select the User to update
     @GetMapping("/update/{userName}")
     public String editUser(@PathVariable("userName") String userName, Model model){
@@ -70,7 +66,7 @@ public class UserController {
 
     //update, by saving the changes on the User
     @PostMapping("/update")
-    public String updateUser(@ModelAttribute("user") UserDTO user, BindingResult bindingResult, Model model){
+    public String updateUser(@Valid @ModelAttribute("user") UserDTO user, BindingResult bindingResult, Model model){
 
         if(bindingResult.hasErrors()){
             model.addAttribute("roles",roleService.listAllRoles());
