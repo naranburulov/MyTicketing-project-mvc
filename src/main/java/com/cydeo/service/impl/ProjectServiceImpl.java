@@ -22,14 +22,12 @@ public class ProjectServiceImpl implements ProjectService {
     private final MapperUtil mapperUtil;
     private final ProjectRepository projectRepository;
     private final UserService userService;
-    private final ProjectService projectService;
     private final TaskService taskService;
 
-    public ProjectServiceImpl(MapperUtil mapperUtil, ProjectRepository projectRepository, UserService userService, ProjectService projectService, TaskService taskService) {
+    public ProjectServiceImpl(MapperUtil mapperUtil, ProjectRepository projectRepository, UserService userService, TaskService taskService) {
         this.mapperUtil = mapperUtil;
         this.projectRepository = projectRepository;
         this.userService = userService;
-        this.projectService = projectService;
         this.taskService = taskService;
     }
 
