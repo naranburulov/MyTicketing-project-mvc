@@ -44,9 +44,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO findByUserName(String userName) {
 
-        User theUser = userRepository.findByUserNameAndIsDeleted(userName, false);
+        User user = userRepository.findByUserNameAndIsDeleted(userName, false);
 
-        return userMapper.convertToDto(theUser);
+        return userMapper.convertToDto(user);
 
     }
 
