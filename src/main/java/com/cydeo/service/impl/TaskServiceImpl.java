@@ -11,6 +11,7 @@ import com.cydeo.mapper.MapperUtil;
 import com.cydeo.repository.TaskRepository;
 import com.cydeo.service.TaskService;
 import com.cydeo.service.UserService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -118,8 +119,9 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<TaskDTO> listAllTasksByStatusIsNot(Status status) {
 
-        //hard-coded for now, before security part in future
-        UserDTO loggedInUser = userService.findByUserName("john@employee.com");
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        UserDTO loggedInUser = userService.findByUserName(userName);
         List<Task> tasks = taskRepository.findAllByTaskStatusIsNotAndAssignedEmployee(status, mapperUtil.convert(loggedInUser, User.class));
 
         return tasks.stream().map(task -> mapperUtil.convert(task, TaskDTO.class)).collect(Collectors.toList());
@@ -127,7 +129,10 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<TaskDTO> listAllTasksByStatus(Status status) {
-        UserDTO loggedInUser = userService.findByUserName("john@employee.com");
+
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        UserDTO loggedInUser = userService.findByUserName(userName);
         List<Task> tasks = taskRepository.findAllByTaskStatusAndAssignedEmployee(status, mapperUtil.convert(loggedInUser, User.class));
 
         return tasks.stream().map(task -> mapperUtil.convert(task, TaskDTO.class)).collect(Collectors.toList());
